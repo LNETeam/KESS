@@ -8,6 +8,13 @@ function flist(n) --lists files cleanly for n path
 	end --End the loop
 end
 
+function addslash()
+	strlen=string.len(strdir) --get length
+	if strdir[strlen]~='/' then --add / to prevent creation of new files
+		strdir=strdir.."/"
+	end
+end
+
 
 disk=fs.exists("/disk")--checks if disk is in
 term.clear()--clears OS bs
@@ -41,9 +48,10 @@ end
 
 strdir="/Store/" --sets default directory
 if fs.exists("/kessconfig") then
-cfg=fs.open("kessconfig","r")
-strdir=cfg.readLine()
-cfg.close()
+	cfg=fs.open("kessconfig","r")
+	strdir=cfg.readLine() --read config
+	addslash()
+	cfg.close()
 end
 
 -- This has to go before the rest of the choices to prevent using wrong dir
@@ -55,6 +63,7 @@ if ch==7 then --allows user to change default directory
 	chkdirstr=fs.exists(strdir)
 	if chkdirstr==true then --if suggested dir exists, create config, write new default dir, close
 		cfg=fs.open("kessconfig","w")
+		addslash()
 		cfg.write(strdir)
 		cfg.close()
 		print'Directory exists. Storage directory altered.'
@@ -68,6 +77,7 @@ if ch==7 then --allows user to change default directory
 			fs.makeDir(strdir)
 			print'Directory created.'
 			cfg=fs.open("kessconfig","w")
+			addslash()
 			cfg.write(strdir)
 			cfg.close()
 			print'Default directory altered.'
@@ -83,7 +93,7 @@ end
 
 if ch==1 and disk==true then --from store to floppy
 	print'Listing files on Storage...'
-	sleep(.5)
+	sleep(.2)
 	flist(strdir)--lists storage
 	print'Please type the number you wish to add to floppy:'
 	sTf=io.read()--choose a file to copy
@@ -95,7 +105,7 @@ if ch==1 and disk==true then --from store to floppy
 	if ow==false then --if doesnt exist, copy
 		fs.copy(strdir..""..fdir,"/disk/"..fdir)
 		print'Added file to floppy.'
-		sleep(1)
+		sleep(.2)
 	end
 	
 	if ow==true then --if does exist, prompt to overwrite
@@ -107,16 +117,16 @@ if ch==1 and disk==true then --from store to floppy
 		if owp==1 then --yes overwrite
 			print'deleting'
 			fs.delete("/disk/"..fdir) --delete old
-			sleep(1)
+			sleep(.2)
 			print'copying'
 			fs.copy(strdir..""..fdir,"/disk/"..fdir) --replace new
 			print'Added file to floppy.'
-			sleep(1)
+			sleep(.2)
 		end
 		
 		if owp==2 then --no cancel
 			print'Cancelling'
-			sleep(1) --delay then break
+			sleep(.2) --delay then break
 		end
 		
 		print'Press any key to continue.'
@@ -134,7 +144,7 @@ end
 
 if ch==2 and disk==true then --copy from floppy to store
 	print'Listing files on floppy...'
-	sleep(.5)
+	sleep(.2)
 	flist("/disk") --list file on floppy
 	print'Please type the number you wish to choose:'
 	sTf=io.read() --choose file
@@ -145,7 +155,7 @@ if ch==2 and disk==true then --copy from floppy to store
 	if ow==false then --doesnt exist
 		fs.copy("/disk/"..fdir,strdir..""..fdir) --copy to store
 		print'Added file to storage.'
-		sleep(1)
+		sleep(.2)
 	end
 	
 	if ow==true then --does exist, prompt to overwrite
@@ -156,16 +166,16 @@ if ch==2 and disk==true then --copy from floppy to store
 	if owp==1 then --yea overwrite
 		print'deleting'
 		fs.delete(strdir..""..fdir) --delete old
-		sleep(1)
+		sleep(.2)
 		print'copying'
 		fs.copy("/disk/"..fdir,strdir..""..fdir) --copy new
 		print'Added file to storage.'
-		sleep(1)
+		sleep(.2)
 	end
 	
 	if owp==2 then --cancel 
 		print'Cancelling'
-		sleep(1)
+		sleep(.2)
 	end
 	
 	print'Press any key to continue.'
@@ -184,7 +194,7 @@ end
 
 if ch==3 then --delete in Store
 	print'Listing files in storage...'
-	sleep(.5)
+	sleep(.2)
 	flist(strdir)--list storage files
 	print'Please choose a file to delete or press ctrl+r to reboot.'
 	sTf=io.read() --choose file
@@ -201,7 +211,7 @@ end
 
 if ch==4 and disk==true then --delete on disk
 	print'Listing files in disk...'
-	sleep(.5)
+	sleep(.2)
 	flist("/disk/") --list disk
 	print'Please choose a file to delete or press ctrl+r to reboot.'
 	sTf=io.read() --choose file
@@ -224,7 +234,7 @@ end
 
 if ch==5 then -- list storage
 	print'Listing files in storage...'
-	sleep(.5)
+	sleep(.2)
 	flist(strdir)
 	print'Press any key to continue.'
 	io.read()
@@ -234,7 +244,7 @@ end
 
 if ch==6 and disk==true then --list disk
 	print'Listing files in disk...'
-	sleep(.5)
+	sleep(.2)
 	flist("/disk")
 	print'Press any key to continue.'
 	io.read()
