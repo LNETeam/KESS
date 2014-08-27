@@ -15,7 +15,7 @@ function addslash()
 	end
 end
 
-
+ 
 disk=fs.exists("/disk")--checks if disk is in
 term.clear()--clears OS bs
 
