@@ -13,7 +13,7 @@ function addslash()
 	if strdir[strlen]~='/' then --add / to prevent creation of new files
 		strdir=strdir.."/"
 	end
-end
+end 
 
  
 disk=fs.exists("/disk")--checks if disk is in
