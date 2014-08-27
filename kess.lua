@@ -13,10 +13,10 @@ function addslash()
 	if strdir[strlen]~='/' then --add / to prevent creation of new files
 		strdir=strdir.."/"
 	end
-end 
+end
 
- 
-disk=fs.exists("/disk")--checks if disk is in
+
+diske=fs.exists("/disk")--checks if disk is in
 term.clear()--clears OS bs
 
 print'Welcome to the Kizz Easy Storage Server'
@@ -30,14 +30,14 @@ print'4: Delete a file from Floppy'
 print'5: View Storage'
 print'6: View Disk'
 print'7: Change Storage Directory'
-
+print'8: Set Label on Disk'
 ch=io.read()--get choice
 ---------------------------------------------- Checks for valid options
-if ch~="1" and ch~="2" and ch~="3" and ch~="4" and ch~="5" and ch~="6" and ch~="7" then --input check
+if ch~="1" and ch~="2" and ch~="3" and ch~="4" and ch~="5" and ch~="6" and ch~="7" and ch~="8" then --input check
 	print'Bad input idiot!'
 	sleep(.5)
 end
-if ch=="1" or ch=="2" or ch=="3" or ch=="4" or ch=="5" or ch=="6" or ch=="7" then--double check
+if ch=="1" or ch=="2" or ch=="3" or ch=="4" or ch=="5" or ch=="6" or ch=="7" or ch=="8" then--double check
 	ch=ch+1-1--convert to numeric
 end
 
@@ -91,7 +91,7 @@ end
 
 ----------------------------------------------
 
-if ch==1 and disk==true then --from store to floppy
+if ch==1 and diske==true then --from store to floppy
 	print'Listing files on Storage...'
 	sleep(.2)
 	flist(strdir)--lists storage
@@ -129,20 +129,20 @@ if ch==1 and disk==true then --from store to floppy
 			sleep(.2) --delay then break
 		end
 		
-		print'Press any key to continue.'
+		print'Press enter to continue.'
 		io.read()
 	end
 end
 
-if ch==1 and disk==false then --if no disk then quit
+if ch==1 and diske==false then --if no disk then quit
 	print'Failed to find disk.'
-	print'Press any key to continue.'
+	print'Press enter to continue.'
 	io.read()
 end
 
 --------------------------------------------
 
-if ch==2 and disk==true then --copy from floppy to store
+if ch==2 and diske==true then --copy from floppy to store
 	print'Listing files on floppy...'
 	sleep(.2)
 	flist("/disk") --list file on floppy
@@ -178,14 +178,14 @@ if ch==2 and disk==true then --copy from floppy to store
 		sleep(.2)
 	end
 	
-	print'Press any key to continue.'
+	print'Press enter to continue.'
 	io.read()
 	end
 end
 
-if ch==2 and disk==false then --no disk inserted
+if ch==2 and diske==false then --no disk inserted
 print'Failed to find disk.'
-print'Press any key to continue.'
+print'Press enter to continue.'
 io.read()
 end
 
@@ -203,13 +203,13 @@ if ch==3 then --delete in Store
 	print'Deleting...'
 	fs.delete(strdir..""..fdir) --delete file
 	print'Deleted!'
-	print'Press any key to continue.'
+	print'Press enter to continue.'
 	io.read()
 end
 
 --------------------------------------------
 
-if ch==4 and disk==true then --delete on disk
+if ch==4 and diske==true then --delete on disk
 	print'Listing files in disk...'
 	sleep(.2)
 	flist("/disk/") --list disk
@@ -220,13 +220,13 @@ if ch==4 and disk==true then --delete on disk
 	print'Deleting...'
 	fs.delete("/disk/"..fdir) --delete file
 	print'Deleted!'
-	print'Press any key to continue.'
+	print'Press enter to continue.'
 	io.read()
 end
 
-if ch==4 and disk==false then --no disk found
+if ch==4 and diske==false then --no disk found
 	print'Failed to find a floppy.'
-	print'Press any key to continue.'
+	print'Press enter to continue.'
 	io.read()
 end
 
@@ -236,23 +236,59 @@ if ch==5 then -- list storage
 	print'Listing files in storage...'
 	sleep(.2)
 	flist(strdir)
-	print'Press any key to continue.'
+	print'Press enter to continue.'
 	io.read()
 end
 
 --------------------------------------------
 
-if ch==6 and disk==true then --list disk
+if ch==6 and diske==true then --list disk
 	print'Listing files in disk...'
 	sleep(.2)
 	flist("/disk")
-	print'Press any key to continue.'
+	print'Press enter to continue.'
 	io.read()
 end
 
-if ch==6 and disk==false then --no disk found
+if ch==6 and diske==false then --no disk found
 	print'Cannot find a disk.'
-	print'Press any key to continue.'
+	print'Press enter to continue.'
+	io.read()
+end
+
+if ch==8 and diske==true then --list disk
+	print'Please choose the disk drive side:'
+	print'1:Bottom, 2:Top, 3:Left, 4:Right, 5:Back'
+	side=io.read()
+	side=side+1-1
+	if side==1 then
+	side="bottom"
+	end
+	if side==2 then
+	side="top"
+	end
+	if side==3 then
+	side="left"
+	end
+	if side==4 then
+	side="right"
+	end
+	if side==5 then
+	side="back"
+	end
+	
+	print'Please enter the name you wish to assign to the floppy.'
+	fname=io.read()
+	disk.setLabel(side,fname)
+	sleep(.2)
+	print("Floppy renamed to "..fname..".")
+	print'Press enter to continue.'
+	io.read()
+end
+
+if ch==8 and diske==false then --no disk found
+	print'Cannot find a disk.'
+	print'Press enter to continue.'
 	io.read()
 end
 
