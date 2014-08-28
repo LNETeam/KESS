@@ -1,0 +1,6 @@
+install=
+{
+  Dependencies = {},
+  InstallHierarchy = {{"/kess.lua","/kess"}}
+}
+return install
